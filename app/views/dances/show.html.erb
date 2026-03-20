@@ -1,0 +1,128 @@
+<div class="min-h-screen bg-amber-50">
+
+  <!-- HERO IMAGE -->
+  <div style="position:relative; height:400px; overflow:hidden;">
+    <% if @dance.image_url.present? %>
+      <img
+        src="<%= asset_path(@dance.image_url) %>"
+        alt="<%= @dance.name %>"
+        style="width:100%; height:100%; object-fit:cover;"
+      />
+    <% else %>
+      <div style="background:linear-gradient(135deg, #f97316, #dc2626); height:100%;"></div>
+    <% end %>
+    <!-- DARK OVERLAY -->
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.5);"></div>
+
+    <!-- BACK BUTTON -->
+    <div style="position:absolute; top:24px; left:24px; z-index:10;">
+      <%= link_to "← Back to Dances", dances_path,
+          style:"background:rgba(255,255,255,0.2); color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:600; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.3);" %>
+    </div>
+
+    <!-- DANCE NAME OVERLAY -->
+    <div style="position:absolute; bottom:32px; left:40px; z-index:10; color:white;">
+      <span style="background:#f97316; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:1px;"><%= @dance.dance_type %></span>
+      <h1 style="font-size:52px; font-weight:800; margin:8px 0 4px; text-shadow:0 2px 12px rgba(0,0,0,0.4);"><%= @dance.name %></h1>
+      <p style="font-size:16px; opacity:0.85;">📍 <%= @dance.region %></p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div style="max-width:1000px; margin:0 auto; padding:40px 24px;">
+
+    <!-- DESCRIPTION & HISTORY -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px;">
+
+      <!-- DESCRIPTION -->
+      <div style="background:white; border-radius:16px; padding:28px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h2 style="font-size:18px; font-weight:700; color:#111827; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+          💃 About <%= @dance.name %>
+        </h2>
+        <p style="font-size:14px; color:#6b7280; line-height:1.8; margin:0;">
+          <%= @dance.description %>
+        </p>
+      </div>
+
+      <!-- HISTORY -->
+      <div style="background:white; border-radius:16px; padding:28px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <h2 style="font-size:18px; font-weight:700; color:#111827; margin:0 0 12px; display:flex; align-items:center; gap:8px;">
+          📜 History
+        </h2>
+        <p style="font-size:14px; color:#6b7280; line-height:1.8; margin:0;">
+          <%= @dance.history %>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- QUICK FACTS -->
+    <div style="background:linear-gradient(135deg, #f97316, #dc2626); border-radius:16px; padding:28px; margin-bottom:40px; color:white;">
+      <h2 style="font-size:18px; font-weight:700; margin:0 0 20px;">⚡ Quick Facts</h2>
+      <div style="display:flex; gap:32px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:11px; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Dance Form</div>
+          <div style="font-size:16px; font-weight:700;"><%= @dance.name %></div>
+        </div>
+        <div>
+          <div style="font-size:11px; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Region</div>
+          <div style="font-size:16px; font-weight:700;"><%= @dance.region %></div>
+        </div>
+        <div>
+          <div style="font-size:11px; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Type</div>
+          <div style="font-size:16px; font-weight:700;"><%= @dance.dance_type %></div>
+        </div>
+        <div>
+          <div style="font-size:11px; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Videos</div>
+          <div style="font-size:16px; font-weight:700;"><%= @dance.videos.count %> Lessons</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEOS SECTION -->
+    <div style="margin-bottom:40px;">
+      <h2 style="font-size:22px; font-weight:700; color:#111827; margin:0 0 20px;">🎬 Video Lessons</h2>
+
+      <% if @videos.any? %>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+          <% @videos.each do |video| %>
+            <div style="background:white; border-radius:16px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+              <!-- YOUTUBE EMBED -->
+              <% youtube_id = video.youtube_url&.match(/(?:v=|youtu\.be\/)([^&\n?#]+)/)&.[](1) %>
+              <% if youtube_id %>
+                <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+                  <iframe
+                    src="https://www.youtube.com/embed/<%= youtube_id %>"
+                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              <% else %>
+                <div style="height:180px; background:linear-gradient(135deg, #f97316, #dc2626); display:flex; align-items:center; justify-content:center;">
+                  <span style="color:white; font-size:40px;">🎬</span>
+                </div>
+              <% end %>
+              <div style="padding:16px;">
+                <h3 style="font-size:14px; font-weight:700; color:#111827; margin:0 0 4px;"><%= video.title %></h3>
+                <span style="font-size:11px; background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:20px; font-weight:600;"><%= video.level %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div style="background:white; border-radius:16px; padding:40px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:48px; margin-bottom:12px;">🎬</div>
+          <p style="font-size:16px; font-weight:600; color:#111827; margin:0 0 4px;">Videos Coming Soon!</p>
+          <p style="font-size:13px; color:#9ca3af; margin:0;">We are adding video lessons for <%= @dance.name %> soon!</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- BACK BUTTON BOTTOM -->
+    <div style="text-align:center;">
+      <%= link_to "← Back to All Dances", dances_path,
+          style:"background:#f97316; color:white; padding:12px 32px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600;" %>
+    </div>
+
+  </div>
+</div>

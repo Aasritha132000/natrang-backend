@@ -1,0 +1,169 @@
+<div class="min-h-screen bg-amber-50">
+
+  <!-- HERO SLIDESHOW -->
+  <div style="position:relative; height:520px; overflow:hidden;">
+
+    <!-- SLIDES -->
+    <div class="slide" style="position:absolute; inset:0; background-image:url('<%= asset_path('slide1.jpg') %>'); background-size:cover; background-position:center; opacity:1; transition:opacity 1.5s ease;"></div>
+    <div class="slide" style="position:absolute; inset:0; background-image:url('<%= asset_path('slide2.jpg') %>'); background-size:cover; background-position:center; opacity:0; transition:opacity 1.5s ease;"></div>
+    <div class="slide" style="position:absolute; inset:0; background-image:url('<%= asset_path('slide3.jpg') %>'); background-size:cover; background-position:center; opacity:0; transition:opacity 1.5s ease;"></div>
+    <div class="slide" style="position:absolute; inset:0; background-image:url('<%= asset_path('slide4.jpg') %>'); background-size:cover; background-position:center; opacity:0; transition:opacity 1.5s ease;"></div>
+
+    <!-- DARK OVERLAY -->
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.55); z-index:1;"></div>
+
+    <!-- HERO CONTENT -->
+    <div style="position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 24px; color:white;">
+      <h1 style="font-size:64px; font-weight:800; margin:0 0 8px; text-shadow:0 2px 12px rgba(0,0,0,0.4);">NataRang</h1>
+      <p style="font-size:22px; margin:0 0 6px;">India's Dance Universe 🇮🇳</p>
+      <p style="font-size:16px; opacity:0.85; margin:0 0 32px;">Learn every Indian dance form — from beginner to professional</p>
+
+      <div style="display:flex; gap:48px;">
+        <div style="text-align:center;">
+          <div style="font-size:40px; font-weight:700;"><%= Dance.count %>+</div>
+          <div style="font-size:13px; opacity:0.75;">Dance Forms</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:40px; font-weight:700;">500+</div>
+          <div style="font-size:13px; opacity:0.75;">Video Lessons</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:40px; font-weight:700;">3</div>
+          <div style="font-size:13px; opacity:0.75;">Skill Levels</div>
+        </div>
+      </div>
+
+      <!-- DOTS -->
+      <div style="display:flex; gap:8px; margin-top:24px;">
+        <span class="dot" style="width:10px; height:10px; border-radius:50%; background:white; opacity:1; cursor:pointer;"></span>
+        <span class="dot" style="width:10px; height:10px; border-radius:50%; background:white; opacity:0.4; cursor:pointer;"></span>
+        <span class="dot" style="width:10px; height:10px; border-radius:50%; background:white; opacity:0.4; cursor:pointer;"></span>
+        <span class="dot" style="width:10px; height:10px; border-radius:50%; background:white; opacity:0.4; cursor:pointer;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH + FILTER -->
+  <div style="padding:24px 32px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+
+    <!-- SEARCH BAR -->
+    <div style="position:relative; width:100%; max-width:500px;">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search dance forms..."
+        oninput="searchDances(this.value)"
+        style="width:100%; box-sizing:border-box; padding:12px 20px 12px 48px; border:2px solid #f97316; border-radius:50px; font-size:14px; outline:none; background:white; box-shadow:0 2px 12px rgba(249,115,22,0.15);"
+      />
+      <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:18px;">🔍</span>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div style="display:flex; gap:12px;">
+      <a href="?type=all" style="padding:8px 24px; border-radius:50px; text-decoration:none; font-weight:600; font-size:14px; <%= params[:type].blank? || params[:type] == 'all' ? 'background:#f97316; color:white;' : 'border:2px solid #f97316; color:#f97316;' %>">All</a>
+      <a href="?type=Classical" style="padding:8px 24px; border-radius:50px; text-decoration:none; font-weight:600; font-size:14px; <%= params[:type] == 'Classical' ? 'background:#f97316; color:white;' : 'border:2px solid #f97316; color:#f97316;' %>">Classical</a>
+      <a href="?type=Folk" style="padding:8px 24px; border-radius:50px; text-decoration:none; font-weight:600; font-size:14px; <%= params[:type] == 'Folk' ? 'background:#f97316; color:white;' : 'border:2px solid #f97316; color:#f97316;' %>">Folk</a>
+    </div>
+
+  </div>
+
+  <!-- DANCE CARDS -->
+  <div class="px-8 pb-16">
+    <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      <% @dances.each do |dance| %>
+        <div class="dance-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+          data-name="<%= dance.name.downcase %>"
+          data-region="<%= dance.region.downcase %>"
+          data-type="<%= dance.dance_type.downcase %>">
+
+          <!-- IMAGE -->
+          <div class="relative h-48 overflow-hidden">
+            <% if dance.image_url.present? %>
+              <img
+                src="<%= asset_path(dance.image_url) %>"
+                alt="<%= dance.name %>"
+                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <div style="display:none; background:linear-gradient(135deg, #f97316, #dc2626); height:100%; align-items:center; justify-content:center;">
+                <span style="color:white; font-size:20px; font-weight:700;"><%= dance.name %></span>
+              </div>
+            <% else %>
+              <div style="background:linear-gradient(135deg, #f97316, #dc2626); height:100%; display:flex; align-items:center; justify-content:center;">
+                <span style="color:white; font-size:20px; font-weight:700;"><%= dance.name %></span>
+              </div>
+            <% end %>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <span class="absolute top-3 right-3 bg-white/90 text-xs font-bold px-3 py-1 rounded-full">
+              <%= dance.dance_type %>
+            </span>
+          </div>
+
+          <!-- INFO -->
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1"><%= dance.name %></h3>
+            <p class="text-xs text-orange-500 font-semibold mb-2">📍 <%= dance.region %></p>
+            <p class="text-sm text-gray-500 mb-4 line-clamp-2"><%= dance.description %></p>
+
+            <div class="flex justify-between items-center">
+              <div class="flex gap-1">
+                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+                <span class="w-2 h-2 rounded-full bg-gray-200"></span>
+              </div>
+              <%= link_to "Explore →", dance_path(dance), class: "bg-orange-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-600 transition-colors" %>
+            </div>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+
+    <!-- NO RESULTS -->
+    <div id="noResults" style="display:none; text-align:center; padding:60px 24px;">
+      <div style="font-size:48px; margin-bottom:12px;">🔍</div>
+      <p style="font-size:18px; font-weight:600; color:#111827; margin:0 0 4px;">No dance forms found!</p>
+      <p style="font-size:14px; color:#9ca3af; margin:0;">Try searching with a different name or region</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  let current = 0;
+
+  function goToSlide(n) {
+    slides[current].style.opacity = '0';
+    dots[current].style.opacity = '0.4';
+    current = (n + slides.length) % slides.length;
+    slides[current].style.opacity = '1';
+    dots[current].style.opacity = '1';
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
+  setInterval(() => goToSlide(current + 1), 3000);
+
+  function searchDances(query) {
+    const cards = document.querySelectorAll('.dance-card');
+    const noResults = document.getElementById('noResults');
+    const q = query.toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const name = card.getAttribute('data-name');
+      const region = card.getAttribute('data-region');
+      const type = card.getAttribute('data-type');
+      if (name.includes(q) || region.includes(q) || type.includes(q)) {
+        card.style.display = 'block';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+</script>

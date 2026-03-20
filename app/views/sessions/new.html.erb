@@ -1,0 +1,139 @@
+<div style="
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  background-image: url('<%= asset_path('login_bg.jpg') %>');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position:relative;
+">
+  <!-- DARK OVERLAY -->
+  <div style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:0;"></div>
+
+  <!-- CARD -->
+  <div style="position:relative; z-index:1; background:white; border-radius:16px; width:100%; max-width:400px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.7);">
+
+    <!-- ORANGE BANNER -->
+    <div style="background:#f97316; padding:16px 28px; text-align:center;">
+      <div style="font-size:11px; font-weight:600; color:white; letter-spacing:2px; text-transform:uppercase; opacity:0.85; margin-bottom:3px;">Welcome back to</div>
+      <div style="font-size:24px; font-weight:700; color:white;">💃 NataRang</div>
+      <div style="font-size:11px; color:white; opacity:0.75; margin-top:2px;">India's Dance Universe 🇮🇳</div>
+    </div>
+
+    <!-- FORM -->
+    <div style="padding:16px 28px 20px;">
+      <p style="font-size:14px; font-weight:600; color:#111827; margin:0 0 12px;">Login to your account</p>
+
+      <!-- FLASH ALERT -->
+      <% if flash[:alert] %>
+        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 14px; margin-bottom:12px;">
+          <p style="color:#ef4444; font-size:12px; margin:0;">❌ <%= flash[:alert] %></p>
+        </div>
+      <% end %>
+
+      <!-- FLASH NOTICE -->
+      <% if flash[:notice] %>
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 14px; margin-bottom:12px;">
+          <p style="color:#16a34a; font-size:12px; margin:0;">✅ <%= flash[:notice] %></p>
+        </div>
+      <% end %>
+
+      <%= form_tag login_path, method: :post, novalidate: true do %>
+
+        <!-- Email -->
+        <div style="margin-bottom:10px;">
+          <label style="display:block; font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">Email Address</label>
+          <%= email_field_tag :email, nil,
+              id: "login_email",
+              placeholder: "Enter your email address",
+              autocomplete: "off",
+              oninput: "checkLoginEmail(this.value)",
+              style: "width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; outline:none; background:#f9fafb;",
+              onfocus: "this.style.borderColor='#f97316'; this.style.background='white'",
+              onblur: "this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb'" %>
+          <p id="login_email_hint" style="font-size:11px; margin:3px 0 0;"></p>
+        </div>
+
+        <!-- Password -->
+        <div style="margin-bottom:16px;">
+          <label style="display:block; font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">Password</label>
+          <div style="position:relative;">
+            <%= password_field_tag :password, nil,
+                id: "login_password",
+                placeholder: "Enter your password",
+                autocomplete: "current-password",
+                style: "width:100%; box-sizing:border-box; padding:8px 40px 8px 12px; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; outline:none; background:#f9fafb;",
+                onfocus: "this.style.borderColor='#f97316'; this.style.background='white'",
+                onblur: "this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb'" %>
+            <button type="button" onclick="toggleLoginPassword()"
+              style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:0; color:#9ca3af; display:flex;">
+              <svg id="login_eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+          style="width:100%; background:#f97316; color:white; border:none; border-radius:8px; padding:10px; font-size:14px; font-weight:600; cursor:pointer;"
+          onmouseover="this.style.background='#dc2626'"
+          onmouseout="this.style.background='#f97316'">
+          Login to NataRang 🎶
+        </button>
+
+      <% end %>
+
+      <!-- Divider -->
+      <div style="display:flex; align-items:center; gap:12px; margin:12px 0;">
+        <div style="flex:1; height:1px; background:#f3f4f6;"></div>
+        <span style="font-size:11px; color:#d1d5db;">or</span>
+        <div style="flex:1; height:1px; background:#f3f4f6;"></div>
+      </div>
+
+      <p style="text-align:center; font-size:13px; color:#9ca3af; margin:0;">
+        Don't have an account?
+        <%= link_to "Sign Up here", new_user_path, style:"color:#f97316; font-weight:600; text-decoration:none;" %>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLoginPassword() {
+  const input = document.getElementById('login_password');
+  const icon = document.getElementById('login_eye');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
+    icon.style.color = '#f97316';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+    icon.style.color = '#9ca3af';
+  }
+}
+
+function checkLoginEmail(value) {
+  const hint = document.getElementById('login_email_hint');
+  const field = document.getElementById('login_email');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (value.length === 0) {
+    hint.textContent = '';
+    field.style.borderColor = '#e5e7eb';
+  } else if (!emailRegex.test(value)) {
+    hint.textContent = '❌ Please enter a valid email address';
+    hint.style.color = '#ef4444';
+    field.style.borderColor = '#ef4444';
+  } else {
+    hint.textContent = '✅ Email looks good!';
+    hint.style.color = '#22c55e';
+    field.style.borderColor = '#22c55e';
+  }
+}
+</script>

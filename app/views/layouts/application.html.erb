@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Natrang" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Natrang">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-amber-50">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-sm border-b border-orange-100 fixed top-0 w-full z-50">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        
+        <!-- LOGO -->
+        <%= link_to root_path, class: "text-2xl font-bold" do %>
+          <span class="text-orange-500">Nata</span><span class="text-red-600">Rang</span>
+        <% end %>
+
+        <!-- NAV LINKS -->
+        <div class="flex items-center gap-6">
+          <%= link_to "Dance Forms", root_path, class: "text-sm font-medium text-gray-600 hover:text-orange-500 transition-colors" %>
+          
+          <% if session[:user_id] %>
+            <% current_user = User.find(session[:user_id]) %>
+            <span class="text-sm text-gray-600">👋 <%= current_user.name %></span>
+            <%= link_to "Logout", logout_path, method: :delete, style:"font-size:13px; color:white; background:#ef4444; padding:7px 18px; border-radius:8px; text-decoration:none; font-weight:600; margin-right:16px; border:none; cursor:pointer;" %>
+          <% else %>
+            <%= link_to "Login", login_path, class: "text-sm font-medium text-gray-600 hover:text-orange-500 transition-colors" %>
+            <%= link_to "Sign Up", new_user_path, class: "bg-orange-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded-lg transition-colors" %>
+          <% end %>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- FLASH MESSAGES -->
+    <% if flash[:notice] %>
+      <div class="fixed top-16 left-0 right-0 z-40 flex justify-center pt-2">
+        <div class="bg-green-100 border border-green-300 text-green-700 px-6 py-3 rounded-lg shadow-md text-sm font-medium">
+          ✅ <%= flash[:notice] %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- MAIN CONTENT -->
+    <main class="pt-16">
+      <%= yield %>
+    </main>
+    <!-- FOOTER -->
+<footer style="background:#1a0a00; color:white; padding:40px 24px 20px; margin-top:40px;">
+  <div style="max-width:1100px; margin:0 auto;">
+
+    <!-- TOP SECTION -->
+    <div style="display:flex; flex-wrap:wrap; gap:32px; margin-bottom:32px;">
+
+      <!-- BRAND -->
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:22px; font-weight:700; margin-bottom:8px;">
+          💃 <span style="color:#f97316;">Nata</span><span style="color:#fbbf24;">Rang</span>
+        </div>
+        <p style="font-size:13px; color:#9ca3af; line-height:1.7; margin:0;">
+          India's premier platform for learning and exploring the rich tradition of Indian classical and folk dance forms.
+        </p>
+      </div>
+
+      <!-- DANCE FORMS -->
+      <div style="flex:1; min-width:150px;">
+        <p style="font-size:12px; font-weight:700; color:#f97316; text-transform:uppercase; letter-spacing:1px; margin:0 0 12px;">Dance Forms</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">Bharatanatyam</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">Kathak</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">Odissi</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">Kathakali</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">Garba</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0;">Bhangra</p>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div style="flex:1; min-width:150px;">
+        <p style="font-size:12px; font-weight:700; color:#f97316; text-transform:uppercase; letter-spacing:1px; margin:0 0 12px;">Quick Links</p>
+        <%= link_to "Home", root_path, style:"display:block; font-size:13px; color:#9ca3af; text-decoration:none; margin-bottom:6px;" %>
+        <%= link_to "Dance Forms", dances_path, style:"display:block; font-size:13px; color:#9ca3af; text-decoration:none; margin-bottom:6px;" %>
+        <%= link_to "Login", login_path, style:"display:block; font-size:13px; color:#9ca3af; text-decoration:none; margin-bottom:6px;" %>
+        <%= link_to "Sign Up", new_user_path, style:"display:block; font-size:13px; color:#9ca3af; text-decoration:none;" %>
+      </div>
+
+      <!-- CONTACT -->
+      <div style="flex:1; min-width:150px;">
+        <p style="font-size:12px; font-weight:700; color:#f97316; text-transform:uppercase; letter-spacing:1px; margin:0 0 12px;">Contact</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">📧 hello@natrang.in</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0 0 6px;">📍 Bengaluru, India</p>
+        <p style="font-size:13px; color:#9ca3af; margin:0;">🇮🇳 Made with ❤️ in India</p>
+      </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <div style="height:1px; background:#2d1a0a; margin-bottom:20px;"></div>
+
+    <!-- BOTTOM -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
+      <p style="font-size:12px; color:#6b7280; margin:0;">© 2026 NataRang. All rights reserved.</p>
+      <p style="font-size:12px; color:#6b7280; margin:0;">Celebrating the art of Indian dance 💃🕺</p>
+    </div>
+
+  </div>
+</footer>
+
+  </body>
+</html>
