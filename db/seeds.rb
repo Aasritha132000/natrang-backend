@@ -1,3 +1,10 @@
+
+User.destroy_all
+User.create!(
+  name: "Admin",
+  email: "admin@natrang.com",
+  password: "password123"
+)
 Dance.destroy_all
 
 Dance.create!([
