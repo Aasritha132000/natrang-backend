@@ -20,7 +20,7 @@ class QuizzesController < ApplicationController
 
   def check
     quiz = Quiz.find(params[:id])
-    correct = quiz.correct_answer == params[:answer]
+correct = quiz.correct_answer.upcase == params[:answer].upcase
     render json: { correct: correct, correct_answer: quiz.correct_answer }
   end
 end
