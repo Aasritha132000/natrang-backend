@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+ namespace :api do
+  post 'chat', to: 'chat#create'
+end
   root "dances#index"
 
   resources :dances do
