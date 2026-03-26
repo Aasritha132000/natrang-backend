@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 
 class Api::ChatController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  protect_from_forgery with: :null_session
 
   def create
     user_message = params[:message]
