@@ -2,8 +2,6 @@ require 'net/http'
 require 'json'
 
 class Api::ChatController < ApplicationController
-  protect_from_forgery with: :null_session
-
   def create
     user_message = params[:message]
     api_key = Rails.application.credentials.gemini_api_key
