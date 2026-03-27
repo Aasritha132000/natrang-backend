@@ -4,7 +4,7 @@ require 'json'
 class Api::ChatController < ApplicationController
   def create
     user_message = params[:message]
-    api_key = Rails.application.credentials.gemini_api_key
+    api_key = ENV['GEMINI_API_KEY']
 
     uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=#{api_key}")
 
@@ -21,9 +21,8 @@ class Api::ChatController < ApplicationController
     end
 
     result = JSON.parse(response.body)
-    Rails.logger.info "Gemini response: #{result.inspect}"
     answer = result.dig('candidates', 0, 'content', 'parts', 0, 'text')
 
-    render json: { reply: answer, debug: result }
+    render json: { reply: answer }
   end
 end
