@@ -21,8 +21,9 @@ class Api::ChatController < ApplicationController
     end
 
     result = JSON.parse(response.body)
+    Rails.logger.info "Gemini response: #{result.inspect}"
     answer = result.dig('candidates', 0, 'content', 'parts', 0, 'text')
 
-    render json: { reply: answer }
+    render json: { reply: answer, debug: result }
   end
 end
