@@ -20,4 +20,22 @@ class SessionsController < ApplicationController
   def destroy
     render json: { message: "Logged out successfully" }
   end
+def reset_admin
+  user = User.find_by(email: 'admin@natrang.com')
+  if user
+    user.update(password: 'admin123', password_confirmation: 'admin123', is_admin: true)
+    render json: { message: 'Admin password reset!' }
+  else
+    User.create!(name: 'Admin', email: 'admin@natrang.com', password: 'admin123', password_confirmation: 'admin123', is_admin: true)
+    render json: { message: 'Admin created!' }
+  end
+end
+
+
+
+
+
+
+
+
 end
