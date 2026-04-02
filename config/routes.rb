@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   get '/bookings', to: 'bookings#index'
   post '/bookings', to: 'bookings#create'
   put '/bookings/:id', to: 'bookings#update'
-get '/reset_admin', to: 'sessions#reset_admin'
+
+  get '/reset_admin', to: 'sessions#reset_admin'
+  get '/reset_all_users', to: 'sessions#reset_all_users'
+
   get "/up", to: proc { [200, { "Content-Type" => "text/plain" }, ["OK"]] }
 end
