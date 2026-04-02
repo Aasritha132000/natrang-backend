@@ -6,7 +6,6 @@ Review.destroy_all
 Quiz.destroy_all
 Video.destroy_all
 Dance.destroy_all
-User.destroy_all
 
 User.create!(
   name: "Admin",
