@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  dance: one
+  date: 2026-04-02
+  time_slot: MyString
+  level: MyString
+  status: MyString
+  notes: MyString
+
+two:
+  user: two
+  dance: two
+  date: 2026-04-02
+  time_slot: MyString
+  level: MyString
+  status: MyString
+  notes: MyString
