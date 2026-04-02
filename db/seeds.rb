@@ -1,20 +1,12 @@
+cat > ~/Desktop/natrang-backend/db/seeds.rb << 'SEEDFILE'
 Booking.destroy_all
 QuizScore.destroy_all
 Bookmark.destroy_all
 Progress.destroy_all
 Review.destroy_all
 Quiz.destroy_all
-Video.destroy_all
-Dance.destroy_all
 
-User.create!(
-  name: "Admin",
-  email: "admin@natrang.com",
-  password: "password123",
-  is_admin: true
-)
-
-Dance.create!([
+dances_data = [
   { name: "Bharatanatyam", region: "Tamil Nadu", dance_type: "Classical", description: "One of the oldest classical dance forms of India originating from Tamil Nadu.", history: "Bharatanatyam originated in the temples of Tamil Nadu and was performed by Devadasis.", image_url: "dancebb_bg.jpg" },
   { name: "Kathak", region: "Uttar Pradesh", dance_type: "Classical", description: "A major classical dance form from North India known for its fast spins.", history: "Kathak evolved from storytelling traditions in North India.", image_url: "kathak_bg.jpg" },
   { name: "Odissi", region: "Odisha", dance_type: "Classical", description: "Classical dance from Odisha known for its sculpturesque poses.", history: "Odissi is one of the oldest surviving dance forms from ancient India.", image_url: "odissi_bg.jpg" },
@@ -27,7 +19,20 @@ Dance.create!([
   { name: "Bhangra", region: "Punjab", dance_type: "Folk", description: "Energetic folk dance from Punjab performed during harvest season.", history: "Bhangra originated as a harvest celebration dance in Punjab.", image_url: "bhangra_bg.jpg" },
   { name: "Lavani", region: "Maharashtra", dance_type: "Folk", description: "Folk dance from Maharashtra known for rhythm and expressions.", history: "Lavani combines song and dance traditions.", image_url: "lavani_bg.jpg" },
   { name: "Bihu", region: "Assam", dance_type: "Folk", description: "Joyful folk dance from Assam performed during Bihu festival.", history: "Bihu celebrates Assamese New Year.", image_url: "bihu_bg.jpg" }
-])
+]
+
+dances_data.each do |d|
+  Dance.find_or_create_by!(name: d[:name]) do |dance|
+    dance.assign_attributes(d)
+  end
+end
+
+User.find_or_create_by!(email: 'admin@natrang.com') do |user|
+  user.name = 'Admin'
+  user.password = 'password123'
+  user.password_confirmation = 'password123'
+  user.is_admin = true
+end
 
 dances = Dance.all.index_by(&:name)
 
@@ -72,3 +77,4 @@ quizzes.each do |q|
     correct_answer: q[:correct_answer]
   )
 end
+SEEDFILE
