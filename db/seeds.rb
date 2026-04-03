@@ -1,4 +1,3 @@
-cat > ~/Desktop/natrang-backend/db/seeds.rb << 'SEEDFILE'
 Booking.destroy_all
 QuizScore.destroy_all
 Bookmark.destroy_all
@@ -6,8 +5,15 @@ Progress.destroy_all
 Review.destroy_all
 Quiz.destroy_all
 
+User.find_or_create_by!(email: 'admin@natrang.com') do |user|
+  user.name = 'Admin'
+  user.password = 'password123'
+  user.password_confirmation = 'password123'
+  user.is_admin = true
+end
+
 dances_data = [
-  { name: "Bharatanatyam", region: "Tamil Nadu", dance_type: "Classical", description: "One of the oldest classical dance forms of India originating from Tamil Nadu.", history: "Bharatanatyam originated in the temples of Tamil Nadu and was performed by Devadasis.", image_url: "dancebb_bg.jpg" },
+  { name: "Bharatanatyam", region: "Tamil Nadu", dance_type: "Classical", description: "One of the oldest classical dance forms of India originating from Tamil Nadu.", history: "Bharatanatyam originated in the temples of Tamil Nadu.", image_url: "dancebb_bg.jpg" },
   { name: "Kathak", region: "Uttar Pradesh", dance_type: "Classical", description: "A major classical dance form from North India known for its fast spins.", history: "Kathak evolved from storytelling traditions in North India.", image_url: "kathak_bg.jpg" },
   { name: "Odissi", region: "Odisha", dance_type: "Classical", description: "Classical dance from Odisha known for its sculpturesque poses.", history: "Odissi is one of the oldest surviving dance forms from ancient India.", image_url: "odissi_bg.jpg" },
   { name: "Kuchipudi", region: "Andhra Pradesh", dance_type: "Classical", description: "Classical dance from Andhra Pradesh combining dance and drama.", history: "Kuchipudi originated in the village of Kuchipudi in Andhra Pradesh.", image_url: "kuchipudi_bg.jpg" },
@@ -25,13 +31,6 @@ dances_data.each do |d|
   Dance.find_or_create_by!(name: d[:name]) do |dance|
     dance.assign_attributes(d)
   end
-end
-
-User.find_or_create_by!(email: 'admin@natrang.com') do |user|
-  user.name = 'Admin'
-  user.password = 'password123'
-  user.password_confirmation = 'password123'
-  user.is_admin = true
 end
 
 dances = Dance.all.index_by(&:name)
@@ -77,4 +76,3 @@ quizzes.each do |q|
     correct_answer: q[:correct_answer]
   )
 end
-SEEDFILE
